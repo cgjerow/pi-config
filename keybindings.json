@@ -1,0 +1,5 @@
+{
+  "tui.select.up": ["k", "shift+tab"],
+  "tui.select.down": ["j", "tab"],
+  "tui.select.confirm": "enter"
+}

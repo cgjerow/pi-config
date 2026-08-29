@@ -1,0 +1,27 @@
+{
+  "providers": {
+    "omlx": {
+      "baseUrl": "http://localhost:11000/v1",
+      "api": "openai-completions",
+      "apiKey": "${OMLX_API_KEY}",
+      "models": [
+        {
+          "id": "Qwen3.6-35B-A3B-UD-MLX-4bit",
+          "name": "Qwen3.6 35B A3B",
+          "reasoning": true,
+          "input": [
+            "text"
+          ],
+          "contextWindow": 65536,
+          "maxTokens": 32768,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          }
+        }
+      ]
+    }
+  }
+}

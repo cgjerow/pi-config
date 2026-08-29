@@ -1,8 +1,8 @@
 # Machine-specific config
-settings.json
-models.json
-auth.json
 models-store.json
+
+# Secrets (override with env vars where possible)
+auth.json
 
 # Session history
 sessions/
