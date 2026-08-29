@@ -8,7 +8,7 @@ My pi coding agent configuration — skills, extensions, prompt templates, and t
 pi-config/
 ├── skills/           # Custom skills (auto-discovered in ~/.pi/agent/skills/)
 ├── extensions/       # TypeScript extensions (auto-discovered in ~/.pi/agent/extensions/)
-├── templates/        # Prompt templates (auto-discovered in ~/.pi/agent/prompts/)
+├── prompts/          # Prompt templates (auto-discovered in ~/.pi/agent/prompts/)
 ├── themes/           # TUI themes (auto-discovered in ~/.pi/agent/themes/)
 ├── setup.sh          # Symlink everything into ~/.pi/agent/
 └── .gitignore        # Skips secrets and session data
@@ -53,7 +53,7 @@ touch extensions/my-extension.ts
 
 ### New Template
 ```bash
-touch templates/my-template.md
+touch prompts/my-template.md
 # Markdown with --- frontmatter ---
 ```
 
@@ -67,6 +67,6 @@ Then run `setup.sh` again if needed (symlinks are idempotent).
 
 ## Separation of Concerns
 
-- **Version controlled**: skills, extensions, templates, themes (your agent behavior)
+- **Version controlled**: skills, extensions, prompts, themes (your agent behavior)
 - **Git ignored**: `settings.json`, `auth.json`, `models.json`, `sessions/` (machine-specific secrets/data)
 - **Not here**: pi itself (installed via `npm -g`), API keys, session history

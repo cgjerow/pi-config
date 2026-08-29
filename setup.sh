@@ -9,7 +9,7 @@ PI_AGENT_DIR="$HOME/.pi/agent"
 
 mkdir -p "$PI_AGENT_DIR"
 
-for dir in skills extensions templates themes; do
+for dir in skills extensions prompts themes; do
     if [ -d "$SCRIPT_DIR/$dir" ]; then
         target="$PI_AGENT_DIR/$dir"
         if [ -L "$target" ] || [ -e "$target" ]; then
