@@ -1,0 +1,11 @@
+# Machine-specific config
+settings.json
+models.json
+auth.json
+models-store.json
+
+# Session history
+sessions/
+
+# Node modules (if any package has deps)
+node_modules/
