@@ -57,6 +57,7 @@ Potential improvements and customizations for the pi coding agent configuration.
 - [ ] **Translate** — Translate code/comments between languages
 - [ ] **Summarize** — Summarize a file, directory, or codebase
 - [ ] **Best practices** — List best practices for a given technology
+- [ ] **Evaluate** — Critically evaluate a plan, idea, or proposal (assumptions, risks, gaps, alternatives)
 
 ### Existing Skills (already created)
 - [ ] **Debug** — Structured debugging workflow: reproduce → isolate → fix → verify
