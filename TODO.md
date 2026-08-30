@@ -170,3 +170,4 @@ All 20 skills are defined in `skills/` with consistent structure (workflow, outp
 | 2025-08-29 | Skills-first policy | Documented in AGENTS.md |
 | 2025-08-29 | 20 skills defined | All with consistent structure |
 | 2025-08-29 | TODO cleaned up | Merged duplicates, added integrations |
+| 2025-08-29 | Subagent extension | Agents + composites installed |
