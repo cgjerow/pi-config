@@ -2,20 +2,31 @@
 
 Potential improvements and customizations for the pi coding agent configuration.
 
+> **Note:** Pi's extensibility model is unified — everything is an extension (TypeScript). Integrations (Google Drive, GitHub, Slack, etc.), tools, commands, UI components, and event handlers all live in `extensions/`.
+
 ---
 
 ## 🧩 Extensions (TypeScript)
 
-### High Priority
-- [ ] **Session history viewer** — `/sessions` command to list and switch between recent sessions
+### Integrations
+External service integrations via custom tools.
 
-### Medium Priority
+- [ ] **Google Drive** — Read/write files, list folders, share docs
+- [ ] **GitHub** — Create issues, manage PRs, check CI status
+- [ ] **Slack/Discord** — Send notifications, read channels
+- [ ] **Jira** — Create/update tickets, check sprint status
+- [ ] **Notion** — Read/write pages, databases
+- [ ] **Email** — Send emails, read inbox (IMAP)
+- [ ] **Calendar** — Create events, check availability
+
+### Built-in Enhancements
+Extensions that improve pi's core capabilities.
+
+- [ ] **Session history viewer** — `/sessions` command to list and switch between recent sessions
 - [ ] **Terminal output capture** — Auto-format and highlight long command outputs in the TUI
 - [ ] **Clipboard sync** — Copy TUI output to system clipboard with a keybinding
-
-### Low Priority
-- [ ] **Smart diff extension** — Auto-stage only changed files in the current working directory instead of `git add -A`
-- [ ] **Context-aware suggestions** — Extension that reads project files (README, package.json, etc.) and injects into system prompt on session start
+- [ ] **Smart diff extension** — Auto-stage only changed files instead of `git add -A`
+- [ ] **Context-aware suggestions** — Read project files (README, package.json) and inject into system prompt on session start
 - [ ] **File watcher** — Notify when files change outside the session (e.g., another editor)
 - [ ] **Multi-repo support** — Better handling when working across multiple git repos
 - [ ] **Command quick-jump** — `/cd <dir>` to change working directory mid-session
@@ -27,49 +38,37 @@ Potential improvements and customizations for the pi coding agent configuration.
 
 ---
 
-## 🎓 Skills
+## ✅ Skills (all created)
 
-### High Priority
-- [ ] **Debug skill** — Structured debugging workflow: reproduce → isolate → fix → verify
-- [ ] **Refactor skill** — Step-by-step refactoring with safety checks (tests, backups)
-- [ ] **Documentation skill** — Generate/update README, API docs, inline comments
+All 20 skills are defined in `skills/` with consistent structure (workflow, output format, tips).
 
-### Low Priority
-- [ ] **Setup/new-project skill** — Scaffold a new project with best practices for the stack
-- [ ] **Testing skill** — Write unit/integration tests following project conventions
-- [ ] **Dependency audit skill** — Check for outdated/vulnerable packages and propose updates
-- [ ] **Database migration skill** — Safe database schema changes with rollback plans
-- [ ] **Deployment skill** — Step-by-step deploy with health checks
-- [ ] **Performance profiling skill** — Identify bottlenecks and optimize hot paths
-- [ ] **Accessibility audit skill** — Check for WCAG compliance issues
+### Core Development (High)
+- [x] **Debug** — Structured debugging: reproduce → isolate → fix → verify
+- [x] **Refactor** — Step-by-step refactoring with safety checks
+- [x] **Documentation** — Generate/update README, API docs, inline comments
+- [x] **Testing** — Write unit/integration tests following project conventions
+- [x] **Security audit** — Focused security review of code/config/infra
+- [x] **Explain** — Explain code, functions, or errors in plain language
 
----
+### Analysis & Decision-Making (Medium)
+- [x] **Deep dive** — Thorough technical explanation of why something works
+- [x] **Compare** — Structured comparison of approaches/libraries/frameworks
+- [x] **Evaluate** — Critical evaluation of plans/ideas (assumptions, risks, gaps)
+- [x] **Changelog** — Generate changelog from git history
+- [x] **Dependency audit** — Check for outdated/vulnerable packages
+- [x] **Best practices** — List best practices for a given technology
 
-## 🎓 Skills (continued)
+### Operations & Maintenance (Medium/Low)
+- [x] **Setup/new-project** — Scaffold a new project with best practices
+- [x] **Deployment** — Step-by-step deploy with health checks
+- [x] **Database migration** — Safe schema changes with rollback plans
+- [x] **Performance profiling** — Identify bottlenecks and optimize
+- [x] **Accessibility audit** — Check WCAG compliance
 
-### New Skills (migrated from prompt templates)
-- [ ] **Explain** — Explain a code block, function, or error in plain language
-- [ ] **Deep dive** — Deep dive into why a solution works
-- [ ] **Compare** — Compare two approaches/libraries/frameworks
-- [ ] **Security audit** — Focused security review of a codebase section
-- [ ] **Changelog** — Generate a changelog from git history
-- [ ] **TODO extraction** — Extract TODOs and follow-up items from a diff
-- [ ] **Translate** — Translate code/comments between languages
-- [ ] **Summarize** — Summarize a file, directory, or codebase
-- [ ] **Best practices** — List best practices for a given technology
-- [ ] **Evaluate** — Critically evaluate a plan, idea, or proposal (assumptions, risks, gaps, alternatives)
-
-### Existing Skills (already created)
-- [ ] **Debug** — Structured debugging workflow: reproduce → isolate → fix → verify
-- [ ] **Refactor** — Step-by-step refactoring with safety checks (tests, backups)
-- [ ] **Documentation** — Generate/update README, API docs, inline comments
-- [ ] **Setup/new-project** — Scaffold a new project with best practices for the stack
-- [ ] **Testing** — Write unit/integration tests following project conventions
-- [ ] **Dependency audit** — Check for outdated/vulnerable packages and propose updates
-- [ ] **Database migration** — Safe database schema changes with rollback plans
-- [ ] **Deployment** — Step-by-step deploy with health checks
-- [ ] **Performance profiling** — Identify bottlenecks and optimize hot paths
-- [ ] **Accessibility audit** — Check for WCAG compliance issues
+### Utility (Low)
+- [x] **TODO extraction** — Extract TODOs from diffs/reviews/conversations
+- [x] **Translate** — Translate code/comments between languages
+- [x] **Summarize** — Summarize files, directories, or codebases
 
 ---
 
@@ -163,20 +162,11 @@ Potential improvements and customizations for the pi coding agent configuration.
 
 ---
 
-## 🤔 Nice-to-Have Ideas
-
-- [ ] **AI-generated commit messages** — Use the prompt template + LLM for better messages instead of just taking the first line
-- [ ] **Session tags** — Tag sessions with labels for filtering (`#bug`, `#feature`, `#learning`)
-- [ ] **Voice input** — Extension for speech-to-text input
-- [ ] **Code golf mode** — `/golf` for minimal/optimized solutions
-- [ ] **Pair programming mode** — Structured turn-taking for collaborative work
-- [ ] **Learning mode** — Pi explains every step in detail for educational purposes
-- [ ] **Project onboarding** — `/onboard` to generate a project overview from the codebase
-
----
-
 ## ✅ Completed
 
 | Date | Item | Notes |
 |------|------|-------|
 | 2025-08-29 | Initial TODO list created | Audit of existing config |
+| 2025-08-29 | Skills-first policy | Documented in AGENTS.md |
+| 2025-08-29 | 20 skills defined | All with consistent structure |
+| 2025-08-29 | TODO cleaned up | Merged duplicates, added integrations |
