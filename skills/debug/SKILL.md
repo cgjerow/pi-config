@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Structured debugging workflow: reproduce → isolate → fix → verify. Use when something is broken or behaving unexpectedly.
+description: "Structured debugging workflow: reproduce -> isolate -> fix -> verify. Use when something is broken or behaving unexpectedly."
 ---
 
 # Debug Skill
