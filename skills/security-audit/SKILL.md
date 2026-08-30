@@ -1,45 +1,89 @@
 ---
 name: security-audit
-description: Focused security review of a codebase section. Identifies vulnerabilities, insecure patterns, and proposes fixes.
+description: Focused security review of code, configuration, or infrastructure. Identifies vulnerabilities, insecure patterns, and proposes specific fixes.
 ---
 
 # Security Audit Skill
 
-Focused security review of code, configuration, or infrastructure.
+Systematic security review of code, configuration, or infrastructure.
 
-## Usage
+## Workflow
 
-Provide the code, config files, or infrastructure you want audited. The skill will check:
+### 1. Scope
+- What's being audited? (code, config, infrastructure, dependencies)
+- What's the threat model? (internal users, external attackers, data exposure)
 
-1. **Input validation** — Are all inputs sanitized?
-2. **Authentication/authorization** — Are access controls proper?
-3. **Data handling** — Are secrets, passwords, tokens handled securely?
-4. **Dependencies** — Known vulnerabilities in packages?
-5. **Common CWE top 25** — OWASP-related issues
-6. **Configuration** — Insecure defaults, over-privileged access
+### 2. Check
+
+**Input Validation:**
+- Are all inputs sanitized?
+- Is output encoding applied?
+- Are type checks enforced?
+
+**Authentication & Authorization:**
+- Are credentials stored securely?
+- Is authorization checked on every endpoint?
+- Are sessions/tokens handled properly?
+
+**Data Handling:**
+- Are secrets, passwords, API keys handled securely?
+- Is sensitive data encrypted at rest and in transit?
+- Are there any data leaks in logs or error messages?
+
+**Dependencies:**
+- Are there known CVEs in dependencies?
+- Are dependencies up to date?
+
+**Common Vulnerabilities (OWASP Top 10):**
+- SQL injection, XSS, CSRF
+- Insecure deserialization
+- Security misconfiguration
+- Insecure direct object references
+
+### 3. Report
+
+For each finding:
+- Severity (Critical / High / Medium / Low)
+- Location (file, line, function)
+- Description of the vulnerability
+- Potential impact
+- Specific remediation steps
+
+### 4. Verify
+- All critical and high findings are addressed
+- Fixes don't introduce new vulnerabilities
+- Security checks are automated where possible
 
 ## Output Format
 
-For each finding:
+```markdown
+## Security Audit Report
 
+**Scope:** [What was audited]
+**Date:** [When]
+**Overall Risk:** [Low/Medium/High/Critical]
+
+### Findings
+| # | Severity | Location | Issue | Fix |
+|---|----------|----------|-------|-----|
+| 1 | 🔴 Critical | file.ts:42 | SQL injection | Use parameterized queries |
+
+### Summary
+- Critical: N
+- High: N
+- Medium: N
+- Low: N
+
+### Recommendations
+1. [Immediate actions]
+2. [Short-term improvements]
+3. [Long-term practices]
 ```
-🔴 Critical / 🟡 Warning / 🔵 Info
-Finding: [description]
-Location: [file:line]
-Risk: [what an attacker could do]
-Fix: [specific remediation]
-```
-
-## Summary Table
-
-| Severity | Count | Items |
-|----------|-------|-------|
-| Critical | N | [list] |
-| Warning | N | [list] |
-| Info | N | [list] |
 
 ## Tips
 
 - Prioritize by exploitability and impact
 - Include exploit examples for critical findings
-- Suggest fixes, not just problems
+- Suggest specific fixes, not just problems
+- Consider both code and configuration
+- Recommend automated security checks for CI

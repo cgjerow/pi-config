@@ -1,48 +1,72 @@
 ---
 name: compare
-description: Compare two approaches, libraries, frameworks, or technologies. Use when evaluating options for a decision.
+description: Compare two approaches, libraries, frameworks, or technologies. Provides structured analysis of features, trade-offs, and recommendations.
 ---
 
 # Compare Skill
 
 Structured comparison of two or more approaches, libraries, frameworks, or technologies.
 
-## Usage
+## Workflow
 
-Provide the things you want to compare. The skill will analyze:
+### 1. Define Criteria
+- What matters for your use case? (features, performance, ease of use, ecosystem)
+- What are the constraints? (team size, timeline, budget, tech stack)
 
-1. **Features** — What each one can do
-2. **Performance** — Speed, memory, resource usage
-3. **Ecosystem** — Community, docs, tooling, integrations
-4. **Learning curve** — How easy to pick up
-5. **Use cases** — When to choose each one
+### 2. Research
+- Gather factual information about each option
+- Look at benchmarks, documentation, community feedback
+- Consider both strengths and weaknesses
+
+### 3. Evaluate
+- Score each option against the criteria
+- Identify deal-breakers and differentiators
+- Consider the total cost of adoption
+
+### 4. Recommend
+- Provide a clear recommendation based on the analysis
+- Explain the reasoning
+- Suggest a path forward
 
 ## Output Format
 
-```
-## Feature Comparison
-| Feature | Option A | Option B |
-|---------|----------|----------|
-| ... | ... | ... |
+```markdown
+## Comparison: [Option A] vs [Option B]
 
-## Performance
-[Comparison of speed, resource usage]
+### Feature Comparison
+| Feature | [Option A] | [Option B] | Notes |
+|---------|-----------|-----------|-------|
+| ... | ... | ... | ... |
 
-## Ecosystem
-- **Option A:** [Community, docs, tooling]
-- **Option B:** [Community, docs, tooling]
+### Strengths
+- **[Option A]:** [Key advantages]
+- **[Option B]:** [Key advantages]
 
-## Learning Curve
-- **Option A:** [Difficulty level]
-- **Option B:** [Difficulty level]
+### Weaknesses
+- **[Option A]:** [Key disadvantages]
+- **[Option B]:** [Key disadvantages]
 
-## Recommendation
-- Choose **Option A** when: [scenarios]
-- Choose **Option B** when: [scenarios]
+### Performance
+[Benchmark comparison if available]
+
+### Ecosystem
+- **[Option A]:** [Community, docs, tooling, job market]
+- **[Option B]:** [Community, docs, tooling, job market]
+
+### Recommendation
+
+**Choose [Option X] if:** [scenarios]
+**Choose [Option Y] if:** [scenarios]
+
+### Decision Matrix
+| Criterion | Weight | [Option A] | [Option B] |
+|-----------|--------|-----------|-----------|
+| ... | ... | ... | ... |
 ```
 
 ## Tips
 
 - Be objective — present facts, not opinions
-- Include real-world benchmarks if available
+- Include real-world benchmarks where possible
 - Consider the specific context of the user's project
+- Acknowledge when options are close and the choice is subjective
