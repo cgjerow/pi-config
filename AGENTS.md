@@ -41,6 +41,14 @@ This ensures all agent behavior is reproducible, portable, and under version con
 | Models | `models.json` (API keys via env vars) |
 | Settings | `settings.json` |
 
+### Skills vs Prompt Templates
+
+**Prefer skills over prompt templates.** Skills provide structured workflows with checklists, safety steps, and consistent output formats. Prompt templates are simpler — they expand into a base prompt that you can tweak.
+
+When creating a new capability, start with a skill. Use a prompt template only for lightweight, quick-reference prompts that don't need structure.
+
+Existing prompt templates that duplicate skill functionality should be migrated to skills and removed from `prompts/`.
+
 ### What Does NOT Go Here
 
 Machine-specific or secret data is git-ignored:

@@ -7,19 +7,19 @@ Potential improvements and customizations for the pi coding agent configuration.
 ## 🧩 Extensions (TypeScript)
 
 ### High Priority
-- [ ] **Smart diff extension** — Auto-stage only changed files in the current working directory instead of `git add -A`
 - [ ] **Session history viewer** — `/sessions` command to list and switch between recent sessions
-- [ ] **Context-aware suggestions** — Extension that reads project files (README, package.json, etc.) and injects into system prompt on session start
-- [ ] **Terminal output capture** — Auto-format and highlight long command outputs in the TUI
 
 ### Medium Priority
-- [ ] **File watcher** — Notify when files change outside the session (e.g., another editor)
-- [ ] **Multi-repo support** — Better handling when working across multiple git repos
+- [ ] **Terminal output capture** — Auto-format and highlight long command outputs in the TUI
 - [ ] **Clipboard sync** — Copy TUI output to system clipboard with a keybinding
-- [ ] **Command quick-jump** — `/cd <dir>` to change working directory mid-session
-- [ ] **Session export** — Export session to markdown or JSON with `/export`
 
 ### Low Priority
+- [ ] **Smart diff extension** — Auto-stage only changed files in the current working directory instead of `git add -A`
+- [ ] **Context-aware suggestions** — Extension that reads project files (README, package.json, etc.) and injects into system prompt on session start
+- [ ] **File watcher** — Notify when files change outside the session (e.g., another editor)
+- [ ] **Multi-repo support** — Better handling when working across multiple git repos
+- [ ] **Command quick-jump** — `/cd <dir>` to change working directory mid-session
+- [ ] **Session export** — Export session to markdown or JSON with `/export`
 - [ ] **Web search tool** — Extension that wraps `curl`/`wget` for quick web lookups
 - [ ] **Code snippet library** — `/snip <name>` to save and retrieve code snippets
 - [ ] **Environment variable manager** — `/env` to view/set env vars for the session
@@ -32,40 +32,43 @@ Potential improvements and customizations for the pi coding agent configuration.
 ### High Priority
 - [ ] **Debug skill** — Structured debugging workflow: reproduce → isolate → fix → verify
 - [ ] **Refactor skill** — Step-by-step refactoring with safety checks (tests, backups)
-- [ ] **Setup/new-project skill** — Scaffold a new project with best practices for the stack
-
-### Medium Priority
 - [ ] **Documentation skill** — Generate/update README, API docs, inline comments
+
+### Low Priority
+- [ ] **Setup/new-project skill** — Scaffold a new project with best practices for the stack
 - [ ] **Testing skill** — Write unit/integration tests following project conventions
 - [ ] **Dependency audit skill** — Check for outdated/vulnerable packages and propose updates
 - [ ] **Database migration skill** — Safe database schema changes with rollback plans
-
-### Low Priority
 - [ ] **Deployment skill** — Step-by-step deploy with health checks
 - [ ] **Performance profiling skill** — Identify bottlenecks and optimize hot paths
 - [ ] **Accessibility audit skill** — Check for WCAG compliance issues
 
 ---
 
-## 📝 Prompt Templates
+## 🎓 Skills (continued)
 
-### High Priority
-- [ ] **`/explain`** — Explain a code block, function, or error in plain language
-- [ ] **`/refactor`** — Suggest refactoring with before/after examples
-- [ ] **`/test`** — Generate unit tests for a given file or function
-- [ ] **`/why-does-this-work`** — Deep dive into why a solution works
+### New Skills (migrated from prompt templates)
+- [ ] **Explain** — Explain a code block, function, or error in plain language
+- [ ] **Deep dive** — Deep dive into why a solution works
+- [ ] **Compare** — Compare two approaches/libraries/frameworks
+- [ ] **Security audit** — Focused security review of a codebase section
+- [ ] **Changelog** — Generate a changelog from git history
+- [ ] **TODO extraction** — Extract TODOs and follow-up items from a diff
+- [ ] **Translate** — Translate code/comments between languages
+- [ ] **Summarize** — Summarize a file, directory, or codebase
+- [ ] **Best practices** — List best practices for a given technology
 
-### Medium Priority
-- [ ] **`/compare`** — Compare two approaches/libraries/frameworks
-- [ ] **`/docs`** — Generate documentation for a function/class/module
-- [ ] **`/security-audit`** — Focused security review of a codebase section
-- [ ] **`/changelog`** — Generate a changelog from git history
-- [ ] **`/todo-from-diff`** — Extract TODOs and follow-up items from a diff
-
-### Low Priority
-- [ ] **`/translate`** — Translate code/comments between languages
-- [ ] **`/summarize`** — Summarize a file or directory of files
-- [ ] **`/best-practices`** — List best practices for a given technology
+### Existing Skills (already created)
+- [ ] **Debug** — Structured debugging workflow: reproduce → isolate → fix → verify
+- [ ] **Refactor** — Step-by-step refactoring with safety checks (tests, backups)
+- [ ] **Documentation** — Generate/update README, API docs, inline comments
+- [ ] **Setup/new-project** — Scaffold a new project with best practices for the stack
+- [ ] **Testing** — Write unit/integration tests following project conventions
+- [ ] **Dependency audit** — Check for outdated/vulnerable packages and propose updates
+- [ ] **Database migration** — Safe database schema changes with rollback plans
+- [ ] **Deployment** — Step-by-step deploy with health checks
+- [ ] **Performance profiling** — Identify bottlenecks and optimize hot paths
+- [ ] **Accessibility audit** — Check for WCAG compliance issues
 
 ---
 
