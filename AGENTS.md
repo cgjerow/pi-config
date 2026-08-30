@@ -56,3 +56,93 @@ Machine-specific or secret data is git-ignored:
 - `auth.json`
 - `models.json`
 - `sessions/`
+
+---
+
+## Subagent Extension
+
+The `subagent` extension delegates tasks to specialized subagents running in **isolated `pi` processes** with their own context windows. This prevents polluting the main conversation with intermediate work.
+
+### How It Works
+
+Each subagent is a separate `pi` process with:
+- Its own system prompt (defined in an agent `.md` file)
+- Optional tool restrictions (subset of tools)
+- Optional model selection (defaults to parent session's model)
+- Independent context window (no carryover from the main session)
+
+### Execution Modes
+
+| Mode | Params | Description |
+|------|--------|-------------|
+| Single | `{ agent, task }` | One agent, one task |
+| Parallel | `{ tasks: [...] }` | Multiple agents concurrently (max 8, 4 concurrent) |
+| Chain | `{ chain: [...] }` | Sequential with `{previous}` placeholder for output handoff |
+
+### Agent Definitions
+
+Agents are markdown files with YAML frontmatter:
+
+```markdown
+---
+name: agent-name
+description: What this agent does
+tools: read, grep, find, ls, bash
+model: claude-haiku-4-5
+---
+
+System prompt for the agent goes here.
+```
+
+**Locations:**
+| Location | Scope | Loaded when |
+|----------|-------|-------------|
+| `~/.pi/agent/agents/*.md` | User-level | Always |
+| `.pi/agents/*.md` | Project-level | `agentScope: "both"` or `"project"` (with trust confirmation) |
+
+Project agents override user agents with the same name when `agentScope: "both"`.
+
+### Built-in Agents
+
+| Agent | Purpose | Model | Tools |
+|-------|---------|-------|-------|
+| `scout` | Fast codebase recon, returns compressed context | Haiku | read, grep, find, ls, bash |
+| `planner` | Creates implementation plans from context | Sonnet | read, grep, find, ls |
+| `reviewer` | Code review (read-only bash) | Sonnet | read, grep, find, ls, bash |
+| `worker` | General-purpose, full capabilities | Sonnet | all |
+
+### Workflow Prompts
+
+| Prompt | Flow | Use case |
+|--------|------|----------|
+| `/implement <query>` | scout → planner → worker | Full implementation |
+| `/scout-and-plan <query>` | scout → planner | Just the plan, no changes |
+| `/implement-and-review <query>` | worker → reviewer → worker | Implement + review + fix |
+
+### Creating Custom Agents
+
+1. Create `skills/<name>/SKILL.md` for the skill definition
+2. Create `agents/<name>.md` with frontmatter + system prompt
+3. Optionally create a workflow prompt in `prompts/` for multi-step chains
+
+**Example: test-gen agent**
+```markdown
+---
+name: test-gen
+description: Writes unit tests for given code
+tools: read, write, bash
+---
+
+You are a test generation specialist. Write comprehensive unit tests...
+```
+
+### Security Model
+
+Project-local agents are repo-controlled prompts that can instruct the model to read files, run bash commands, etc. The extension prompts for confirmation before running project-local agents in untrusted projects. Set `confirmProjectAgents: false` to skip confirmation for trusted repos.
+
+### Output Display
+
+- **Collapsed view** (default): Status icon, last 5-10 items, usage stats
+- **Expanded view** (Ctrl+O): Full task text, all tool calls, final output as Markdown
+- **Parallel streaming**: Live status for all tasks, "2/3 done, 1 running" updates
+- **Chain streaming**: Shows completed steps + current step progress
