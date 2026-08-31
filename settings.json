@@ -1,4 +1,7 @@
 {
   "theme": "dark/dark",
-  "lastChangelogVersion": "0.84.4"
+  "lastChangelogVersion": "0.84.4",
+  "packages": [
+    "npm:pi-vim"
+  ]
 }
