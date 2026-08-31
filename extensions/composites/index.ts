@@ -15,6 +15,7 @@
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Text } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 
 const SubagentParams = Type.Object({
@@ -95,7 +96,9 @@ export default function (pi: ExtensionAPI) {
 
 		renderCall(args, theme, _context) {
 			const preview = args.query.length > 60 ? `${args.query.slice(0, 60)}...` : args.query;
-			return theme.fg("toolTitle", theme.bold("debug ")) + theme.fg("accent", preview);
+			const text = new Text("", 0, 0);
+			text.setText(theme.fg("toolTitle", theme.bold("debug ")) + theme.fg("accent", preview));
+			return text;
 		},
 	});
 
@@ -123,7 +126,9 @@ export default function (pi: ExtensionAPI) {
 
 		renderCall(args, theme, _context) {
 			const preview = args.query.length > 60 ? `${args.query.slice(0, 60)}...` : args.query;
-			return theme.fg("toolTitle", theme.bold("refactor ")) + theme.fg("accent", preview);
+			const text = new Text("", 0, 0);
+			text.setText(theme.fg("toolTitle", theme.bold("refactor ")) + theme.fg("accent", preview));
+			return text;
 		},
 	});
 
@@ -151,7 +156,9 @@ export default function (pi: ExtensionAPI) {
 
 		renderCall(args, theme, _context) {
 			const preview = args.query.length > 60 ? `${args.query.slice(0, 60)}...` : args.query;
-			return theme.fg("toolTitle", theme.bold("test-gen ")) + theme.fg("accent", preview);
+			const text = new Text("", 0, 0);
+			text.setText(theme.fg("toolTitle", theme.bold("test-gen ")) + theme.fg("accent", preview));
+			return text;
 		},
 	});
 }
