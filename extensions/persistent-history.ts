@@ -6,9 +6,11 @@
  *
  * Features:
  * - Saves each submitted command to ~/.pi/history.txt
- * - On session start, loads full history into the editor for up/down arrow navigation
+ * - On session start, loads full history into the editor's internal history stack
+ *   for up/down arrow navigation
  * - Up-arrow navigates history when the editor is empty; preserves standard multiline
  *   editing (cursor moves to previous line) when the editor contains text
+ * - Editor starts empty on new sessions (no auto-population of last query)
  * - Enables cross-session history persistence and iteration
  *
  * Usage: pi --extension persistent-history
@@ -103,6 +105,9 @@ class PersistentHistoryEditor extends CustomEditor {
 
 		const entries = getAllHistoryEntries();
 		for (const entry of entries) {
+			// Only add to history stack, don't set text in editor
+			// This way up-arrow works when editor is empty, but
+			// the last query won't auto-populate the text bar
 			this.addToHistory(entry);
 		}
 	}
@@ -121,11 +126,24 @@ class PersistentHistoryEditor extends CustomEditor {
 }
 
 export default function (pi: ExtensionAPI) {
+	// Capture the current editor text before it gets replaced,
+	// so we can restore it only if it's non-empty.
+	// This prevents auto-populating the text bar with the last query.
+	let savedText = "";
+
+	// Capture text right before the editor is replaced
 	pi.on("session_start", (_event, ctx) => {
+		savedText = ctx.ui.getEditorText() ?? "";
 		// Replace the default editor with our history-aware version
-		ctx.ui.setEditorComponent((tui, theme, kb) =>
-			new PersistentHistoryEditor(tui, theme, kb)
-		);
+		ctx.ui.setEditorComponent((tui, theme, kb) => {
+			const editor = new PersistentHistoryEditor(tui, theme, kb);
+			// Restore saved text only if the user had typed something
+			// If editor was empty, keep it empty so up-arrow history works
+			if (savedText) {
+				editor.setText(savedText);
+			}
+			return editor;
+		});
 	});
 
 	// Reset history cache on shutdown so the next session gets fresh data
