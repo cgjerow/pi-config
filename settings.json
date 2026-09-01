@@ -1,5 +1,8 @@
 {
   "theme": "dark/dark",
   "lastChangelogVersion": "0.84.4",
-  "packages": []
+  "packages": [
+    "npm:pi-footer",
+    "npm:pi-speeed"
+  ]
 }
