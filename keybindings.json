@@ -2,5 +2,7 @@
   "tui.input.newLine": "shift+enter",
   "tui.select.up": "shift+tab",
   "tui.select.down": "tab",
-  "tui.select.confirm": "enter"
+  "tui.select.confirm": "enter",
+  "tui.editor.historyPrevious": "ctrl+k",
+  "tui.editor.historyNext": "ctrl+j"
 }
