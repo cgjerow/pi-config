@@ -31,39 +31,50 @@ The pi session is used from whichever pane you're in — this is your tmux sessi
 
 **Never** run raw `tmux` commands without scoping to the `battlestations` session. All commands MUST use `-t battlestations` to avoid bleeding into the user's existing sessions.
 
-### 1. Kill Any Existing Battlestations Session
+### 0. Detect Current Session
+
+**Always use the current session** — never hardcode a session number.
 
 ```bash
-tmux kill-session -t battlestations 2>/dev/null || true
+CURRENT_SESSION=$(tmux display-message -p '#S')
 ```
 
-### 2. Create the Session and Window
+### 1. Kill Any Existing Battlestations Window
 
 ```bash
-tmux new-session -d -s battlestations -n cc
-tmux set-option -t battlestations aggressive-resize on
+tmux kill-window -t "${CURRENT_SESSION}:battlestations" 2>/dev/null || true
 ```
 
-### 3. Build the 2x2 Layout (all scoped to `-t battlestations`)
+### 2. Create the Window in Current Session
+
+```bash
+tmux new-window -t "${CURRENT_SESSION}":5 -n 'battlestations'
+tmux set-option -t "${CURRENT_SESSION}":5 aggressive-resize on
+tmux set-option -t "${CURRENT_SESSION}":5 pane-border-status top 2>/dev/null || true
+tmux set-option -t "${CURRENT_SESSION}":5 pane-border-format " #{pane_index} " 2>/dev/null || true
+tmux set-option -t "${CURRENT_SESSION}":5 status-style "bg=black,fg=green" 2>/dev/null || true
+```
+
+### 3. Build the 2x2 Layout (all scoped to current session)
 
 **CRITICAL:** Use pane IDs (`%NN`) instead of numeric indices — indices shift as you split.
 
 ```bash
 # Split left/right
-tmux split-window -h -t battlestations:cc
+tmux split-window -h -t "${CURRENT_SESSION}":battlestations
 
 # Get pane IDs BEFORE further splits
-PANE_IDS=($(tmux list-panes -t battlestations:cc -F '#{pane_id}'))
+PANE_IDS=($(tmux list-panes -t "${CURRENT_SESSION}":battlestations -F '#{pane_id}'))
 
 # Split each half top/bottom
 tmux split-window -v -t "${PANE_IDS[0]}"
 tmux split-window -v -t "${PANE_IDS[1]}"
 
 # Re-read pane IDs (4 now)
-PANE_IDS=($(tmux list-panes -t battlestations:cc -F '#{pane_id}'))
+PANE_IDS=($(tmux list-panes -t "${CURRENT_SESSION}":battlestations -F '#{pane_id}'))
 ```
 
-### 4. Launch Programs (all scoped to `-t battlestations`)
+### 4. Launch Programs (all scoped to current session)
 
 ```bash
 # Top-left: clock
@@ -89,11 +100,9 @@ tmux select-pane -t "${PANE_IDS[0]}"
 - Set reasonable window sizes
 - Make sure the clock uses `clock` command (from `bsdmainutils` or `util-linux`)
 
-### 6. Attach
+### 5. You're Done
 
-```bash
-tmux attach -t battlestations
-```
+The battlestation is now **window 5** in your current session. Switch to it with `Ctrl+B 5` or `Ctrl+B N`.
 
 ## Fallbacks
 
@@ -124,17 +133,15 @@ vim
 
 **Keybindings:**
 - `Ctrl+B` — tmux prefix
-- `Ctrl+B` then `Arrow keys` — switch panes
-- `Ctrl+B` then `X` — close pane (confirm carefully!)
-
-**Reattach:** `tmux attach -t battlestations`
-**Rebuild:** `tmux kill-session -t battlestations` then ask again
+- `Ctrl+B` + `Arrow keys` — switch panes
+- `Ctrl+B` + `5` (or `N`) — switch to battlestation window
+- `Ctrl+B` + `X` — close pane (confirm carefully!)
 ```
 
 ## Tips
 
-- Use `tmux set-option -t battlestations pane-border-status top` for pane headers if supported
-- Add `tmux set-option -t battlestations status-style "bg=black,fg=green"` for a slick status bar
-- **CRITICAL:** Every `tmux` command MUST use `-t battlestations` — never run bare `tmux` commands
-- Reattach anytime: `tmux attach -t battlestations`
-- Kill and rebuild: `tmux kill-session -t battlestations && run the skill again`
+- **CRITICAL:** Always detect current session with `$(tmux display-message -p '#S')` — never hardcode
+- **CRITICAL:** Use pane IDs (`%NN`) not numeric indices — indices shift on splits
+- **CRITICAL:** Scope all commands to the current session — never run bare `tmux` commands
+- Switch to battlestation: `Ctrl+B 5` or `Ctrl+B N`
+- Kill and rebuild: `tmux kill-window -t <current-session>:battlestations` then ask again
