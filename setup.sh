@@ -20,6 +20,16 @@ for dir in skills extensions prompts themes agents; do
     fi
 done
 
+# Symlink AGENTS.md (system prompt / context file)
+if [ -f "$SCRIPT_DIR/AGENTS.md" ]; then
+    target="$PI_AGENT_DIR/AGENTS.md"
+    if [ -L "$target" ] || [ -e "$target" ]; then
+        rm -f "$target"
+    fi
+    ln -s "$SCRIPT_DIR/AGENTS.md" "$target"
+    echo "✓ AGENTS.md → $target"
+fi
+
 # Symlink single-file configs
 for file in keybindings.json models.json settings.json; do
     if [ -f "$SCRIPT_DIR/$file" ]; then

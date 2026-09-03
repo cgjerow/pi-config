@@ -4,14 +4,16 @@
 
 **All configuration is version-controlled and managed through this repo.**
 
-`pi-config/` is the single source of truth for all pi coding agent configuration. Each subdirectory is symlinked into `~/.pi/agent/` via `setup.sh`:
+`pi-config/` is the single source of truth for all pi coding agent configuration. Each subdirectory and file is symlinked into `~/.pi/agent/` via `setup.sh`:
 
 ```
 pi-config/              ← version controlled (this repo)
+├── AGENTS.md           → ~/.pi/agent/AGENTS.md
 ├── skills/             → ~/.pi/agent/skills/
 ├── extensions/         → ~/.pi/agent/extensions/
 ├── prompts/            → ~/.pi/agent/prompts/
-├── themes/             → ~/..pi/agent/themes/
+├── themes/             → ~/.pi/agent/themes/
+├── agents/             → ~/.pi/agent/agents/
 ├── keybindings.json    → ~/.pi/agent/keybindings.json
 └── setup.sh
 
@@ -20,7 +22,7 @@ pi-config/              ← version controlled (this repo)
 
 ### Default Operating Procedure
 
-When asked to create or modify any pi configuration (skills, extensions, prompts, themes, keybindings, etc.):
+When asked to create or modify any pi configuration (skills, extensions, prompts, themes, keybindings, agents, etc.):
 
 1. **Create/modify the file in `pi-config/`** — never in `~/.pi/agent/` directly
 2. **Update `setup.sh`** if a new top-level item needs symlinking
@@ -37,6 +39,7 @@ This ensures all agent behavior is reproducible, portable, and under version con
 | Extensions (TypeScript) | `extensions/` |
 | Prompt templates | `prompts/` |
 | TUI themes | `themes/` |
+| Agent definitions | `agents/` |
 | Keybindings | `keybindings.json` |
 | Models | `models.json` (API keys via env vars) |
 | Settings | `settings.json` |
@@ -146,52 +149,3 @@ Project-local agents are repo-controlled prompts that can instruct the model to 
 - **Expanded view** (Ctrl+O): Full task text, all tool calls, final output as Markdown
 - **Parallel streaming**: Live status for all tasks, "2/3 done, 1 running" updates
 - **Chain streaming**: Shows completed steps + current step progress
-
----
-
-## Composite Tools
-
-Composite tools are high-level tools that orchestrate subagent chains. They register as first-class tools (visible to the LLM) but internally invoke the `subagent` extension.
-
-### Location
-
-`extensions/composites/index.ts` — registers the following tools:
-
-### Available Tools
-
-| Tool | Signature | Chain | Purpose |
-|------|-----------|-------|---------|
-| `debug` | `debug(query: string)` | scout → planner → worker | Find bug → design fix → implement |
-| `refactor` | `refactor(query: string)` | scout → planner → worker | Map deps → design refactor → execute |
-| `test-gen` | `test-gen(query: string)` | scout → planner → worker | Find patterns → design tests → write tests |
-
-### How They Work
-
-Each composite tool:
-1. Receives a natural language query from the LLM
-2. Builds a chain with `{previous}` placeholders for output handoff
-3. Calls `ctx.exec(subagent, { chain })` to run the workflow
-4. Returns the final worker output to the main session
-
-The LLM sees these as regular tools — no prompt templates needed.
-
-### Adding New Composites
-
-To add a new composite tool:
-
-1. Add a new `registerTool()` call in `extensions/composites/index.ts`
-2. Define its chain using `buildChain(["agent1", "agent2", ...], query)`
-3. Call `ctx.exec(getSubagentTool(ctx), { chain, agentScope: "user" }, signal)`
-4. Optionally create agent definitions in `agents/` if new agents are needed
-
-### Composites vs Skills
-
-| | Skills | Composites |
-|---|--------|------------|
-| What | Structured workflow definition | First-class LLM tools |
-| Where | `skills/` | `extensions/composites/` |
-| How invoked | LLM follows skill instructions | LLM calls the tool directly |
-| Context | Main session | Isolated subagent context |
-| Best for | Guidance, checklists, output formats | Heavy code analysis, multi-step workflows |
-
-They can work together: a skill defines the workflow, a composite executes it via subagents.
