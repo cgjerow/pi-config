@@ -29,46 +29,69 @@ The battlestation uses a 4-pane tmux layout:
 
 ## Workflow
 
-### 1. Detect or Create Tmux Session
+### 0. Safety First
 
-Check if already in a tmux session. If not, start one.
+**Never** run raw `tmux` commands without scoping to the `battlestations` session. All commands MUST use `-t battlestations` to avoid bleeding into the user's existing sessions.
 
-```bash
-if [ -z "$TMUX" ]; then
-    tmux new-session -d -s battlestations
-    tmux attach -t battlestations
-    exit
-fi
-```
-
-### 2. Build the Layout
+### 1. Kill Any Existing Battlestations Session
 
 ```bash
-# Split horizontally: top half gets 2 panes, bottom gets pi session
-tmux split-window -v          # Split into top/bottom
-tmux send-keys -t 0 'clock -a -u 0' C-m   # Top-left: clock
-tmux split-window -h          # Split top half left/right
-tmux send-keys -t 1 'clock -a -u 0' C-m   # Top-right: clock
-tmux send-keys -t 2 'htop' C-m                # Middle-left: htop
-tmux send-keys -t 3 'nvim' C-m                # Middle-right: nvim
-tmux select-pane -t 4                           # Focus bottom
+tmux kill-session -t battlestations 2>/dev/null || true
 ```
 
-### 3. Start the Pi Session
-
-In the bottom pane, launch `pi`:
+### 2. Create the Session and Window
 
 ```bash
-tmux send-keys -t 4 'pi' C-m
-tmux select-pane -t 4
+tmux new-session -d -s battlestations -n command-center
+tmux set-option -t battlestations aggressive-resize on
 ```
 
-### 4. Polish
+### 3. Build the Layout (all scoped to `-t battlestations`)
+
+```bash
+# Split vertically: top half / bottom half
+tmux split-window -v -t battlestations:command-center
+
+# Split the TOP pane horizontally
+tmux split-window -h -t battlestations:command-center.0
+
+# Split the BOTTOM pane vertically
+# (first get the bottom pane ID)
+tmux split-window -v -t battlestations:command-center.1
+```
+
+### 4. Launch Programs (all scoped to `-t battlestations`)
+
+```bash
+# Top-left: clock
+tmux send-keys -t battlestations:command-center.0 'clock -a -u 0' C-m
+
+# Top-right: clock
+tmux send-keys -t battlestations:command-center.1 'clock -a -u 0' C-m
+
+# Middle-left: htop
+tmux send-keys -t battlestations:command-center.2 'htop' C-m
+
+# Middle-right: nvim
+tmux send-keys -t battlestations:command-center.3 'nvim' C-m
+
+# Bottom: pi session
+tmux send-keys -t battlestations:command-center.4 'pi' C-m
+tmux select-pane -t battlestations:command-center.4
+```
+
+### 5. Polish
 
 - Set a dark/terminal-friendly theme
 - Configure nice pane borders
 - Set reasonable window sizes
 - Make sure the clock uses `clock` command (from `bsdmainutils` or `util-linux`)
+
+### 6. Attach
+
+```bash
+tmux attach -t battlestations
+```
 
 ## Fallbacks
 
@@ -111,7 +134,8 @@ vim
 
 ## Tips
 
-- Use `tmux set-option -g pane-border-status top` for pane headers if supported
-- Add `set -g status-style bg=black,fg=green` for a slick status bar
-- Consider `tmux-set-buffer` for custom status lines
-- Keep the battlestation session named `battlestations` for easy reattachment: `tmux attach -t battlestations`
+- Use `tmux set-option -t battlestations pane-border-status top` for pane headers if supported
+- Add `tmux set-option -t battlestations status-style "bg=black,fg=green"` for a slick status bar
+- **CRITICAL:** Every `tmux` command MUST use `-t battlestations` — never run bare `tmux` commands
+- Reattach anytime: `tmux attach -t battlestations`
+- Kill and rebuild: `tmux kill-session -t battlestations && run the skill again`
