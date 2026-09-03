@@ -9,23 +9,21 @@ Transform the current tmux session into a fully-loaded command center.
 
 ## Layout
 
-The battlestation uses a 4-pane tmux layout:
+The battlestation uses a 4-pane 2x2 tmux grid:
 
 ```
-┌─────────────────────┬─────────────────────┐
-│                     │                     │
-│   CLOCK (top)       │      CLOCK (top)    │
-│                     │                     │
-├─────────────────────┼─────────────────────┤
-│                     │                     │
-│   HTOP              │     NVIM            │
-│                     │                     │
-├─────────────────────┴─────────────────────┤
-│                                           │
-│           PI SESSION (bottom)             │
-│                                           │
-└───────────────────────────────────────────┘
+┌───────────────┬───────────────┐
+│               │               │
+│   CLOCK       │    CLOCK      │
+│               │               │
+├───────────────┼───────────────┤
+│               │               │
+│    HTOP       │     NVIM      │
+│               │               │
+└───────────────┴───────────────┘
 ```
+
+The pi session is used from whichever pane you're in — this is your tmux session's main purpose.
 
 ## Workflow
 
@@ -42,42 +40,46 @@ tmux kill-session -t battlestations 2>/dev/null || true
 ### 2. Create the Session and Window
 
 ```bash
-tmux new-session -d -s battlestations -n command-center
+tmux new-session -d -s battlestations -n cc
 tmux set-option -t battlestations aggressive-resize on
 ```
 
-### 3. Build the Layout (all scoped to `-t battlestations`)
+### 3. Build the 2x2 Layout (all scoped to `-t battlestations`)
+
+**CRITICAL:** Use pane IDs (`%NN`) instead of numeric indices — indices shift as you split.
 
 ```bash
-# Split vertically: top half / bottom half
-tmux split-window -v -t battlestations:command-center
+# Split left/right
+tmux split-window -h -t battlestations:cc
 
-# Split the TOP pane horizontally
-tmux split-window -h -t battlestations:command-center.0
+# Get pane IDs BEFORE further splits
+PANE_IDS=($(tmux list-panes -t battlestations:cc -F '#{pane_id}'))
 
-# Split the BOTTOM pane vertically
-# (first get the bottom pane ID)
-tmux split-window -v -t battlestations:command-center.1
+# Split each half top/bottom
+tmux split-window -v -t "${PANE_IDS[0]}"
+tmux split-window -v -t "${PANE_IDS[1]}"
+
+# Re-read pane IDs (4 now)
+PANE_IDS=($(tmux list-panes -t battlestations:cc -F '#{pane_id}'))
 ```
 
 ### 4. Launch Programs (all scoped to `-t battlestations`)
 
 ```bash
 # Top-left: clock
-tmux send-keys -t battlestations:command-center.0 'clock -a -u 0' C-m
+tmux send-keys -t "${PANE_IDS[0]}" 'clock -a -u 0' C-m
 
 # Top-right: clock
-tmux send-keys -t battlestations:command-center.1 'clock -a -u 0' C-m
+tmux send-keys -t "${PANE_IDS[1]}" 'clock -a -u 0' C-m
 
-# Middle-left: htop
-tmux send-keys -t battlestations:command-center.2 'htop' C-m
+# Bottom-left: htop
+tmux send-keys -t "${PANE_IDS[2]}" 'htop' C-m
 
-# Middle-right: nvim
-tmux send-keys -t battlestations:command-center.3 'nvim' C-m
+# Bottom-right: nvim
+tmux send-keys -t "${PANE_IDS[3]}" 'nvim' C-m
 
-# Bottom: pi session
-tmux send-keys -t battlestations:command-center.4 'pi' C-m
-tmux select-pane -t battlestations:command-center.4
+# Focus top-left
+tmux select-pane -t "${PANE_IDS[0]}"
 ```
 
 ### 5. Polish
@@ -116,20 +118,17 @@ vim
 ```markdown
 ## Battlestation Deployed 🖥️
 
-**Layout:**
-| Top-Left    | Top-Right   |
-|-------------|-------------|
+**Layout (2x2 grid):**
 | Clock       | Clock       |
-| Middle-Left | Middle-Right|
 | htop        | nvim        |
-| Bottom      | pi session  |
 
 **Keybindings:**
 - `Ctrl+B` — tmux prefix
 - `Ctrl+B` then `Arrow keys` — switch panes
 - `Ctrl+B` then `X` — close pane (confirm carefully!)
 
-**Tip:** The bottom pane is your pi session — that's where the magic happens.
+**Reattach:** `tmux attach -t battlestations`
+**Rebuild:** `tmux kill-session -t battlestations` then ask again
 ```
 
 ## Tips
