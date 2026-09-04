@@ -3,6 +3,7 @@
   "tui.select.up": "shift+tab",
   "tui.select.down": "tab",
   "tui.select.confirm": "enter",
+  "tui.input.tab": "enter",
   "tui.editor.historyPrevious": "ctrl+k",
   "tui.editor.historyNext": "ctrl+j"
 }
