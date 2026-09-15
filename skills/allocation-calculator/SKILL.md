@@ -51,14 +51,19 @@ Employee After Tax Roth Conv       $X,XXX
 - Note the core fund price per share
 
 **Step 2: PCRA ratios**
-- `trad_pct = trad_pcra_dollars / total_pcra_dollars`
-- `roth_pct = roth_pcra_dollars / total_pcra_dollars`
+- Sum Traditional PCRA funding dollars → `trad_pcra_dollars`
+- Sum Roth PCRA funding dollars → `roth_pcra_dollars`
+- Sum total PCRA funding dollars (all sources) → `total_funded_pcra_dollars`
+- **Normalize to 100% of funded dollars** (cash in PCRA is NOT a funding source):
+  - `trad_pct = trad_pcra_dollars / total_funded_pcra_dollars`
+  - `roth_pct = roth_pcra_dollars / total_funded_pcra_dollars`
+- **Critical: these percentages must sum to 100%.** If the funding sources don't equal the total PCRA market value, the difference is unallocated cash — normalize the ratios so Trad + Roth = 100% of the funded portion.
 
 **Step 3: Allocate PCRA shares**
-- For each PCRA holding: `trad_shares = total_shares × trad_pct`
-- For each PCRA holding: `roth_shares = total_shares × roth_pct`
+- For each PCRA holding (including cash): `trad_shares = total_shares × trad_pct`
+- For each PCRA holding (including cash): `roth_shares = total_shares × roth_pct`
 - Round to 3 decimal places
-- For cash/money market: allocate the dollar amount directly
+- For cash/money market: allocate the dollar amount directly (`trad_cash = total_cash × trad_pct`, `roth_cash = total_cash × roth_pct`)
 
 **Step 4: Combine**
 - `trad_total_shares = trad_core_shares + trad_pcra_shares`
@@ -111,10 +116,11 @@ Present results in three tables:
 
 - **No PCRA**: If PCRA is empty or not provided, just report the core breakdown.
 - **Multiple core funds**: If the core plan has funds other than DFSVX, ask which fund each contribution source went to, or note that the user may need to provide that breakdown separately.
-- **Cash in PCRA**: Allocate cash as a dollar amount, not shares.
+- **Cash in PCRA**: Allocate cash proportionally between buckets (same ratio as other holdings), as a dollar amount.
 - **Rounding**: Always show 3 decimal places for shares. Note that fractional shares are theoretical — actual holdings are whole shares.
 
 ## Tips
 
 - The ratio calculation is the key insight: PCRA is funded proportionally from different tax buckets. The same ratio applies to every PCRA holding.
+- **Funding sources often don't equal total PCRA value** — the difference is usually cash sitting in the account. Always normalize ratios to the funded dollars, not the total PCRA value.
 - If the user has PCRA funding sources beyond the three common ones (Pre-Tax, Match, After Tax Roth), ask for the full breakdown before calculating.
