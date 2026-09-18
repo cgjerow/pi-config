@@ -41,7 +41,7 @@ if [ -f "$SCRIPT_DIR/APPEND_SYSTEM.md" ]; then
 fi
 
 # Symlink single-file configs
-for file in keybindings.json models.json settings.json; do
+for file in keybindings.json settings.json; do
     if [ -f "$SCRIPT_DIR/$file" ]; then
         target="$PI_AGENT_DIR/$file"
         if [ -L "$target" ] || [ -e "$target" ]; then
@@ -51,6 +51,23 @@ for file in keybindings.json models.json settings.json; do
         echo "✓ $file → $target"
     fi
 done
+
+# Symlink models.json — prefer models_override if it exists
+if [ -f "$SCRIPT_DIR/models_override.json" ]; then
+    target="$PI_AGENT_DIR/models.json"
+    if [ -L "$target" ] || [ -e "$target" ]; then
+        rm -f "$target"
+    fi
+    ln -s "$SCRIPT_DIR/models_override.json" "$target"
+    echo "✓ models.json → $SCRIPT_DIR/models_override.json (override)"
+elif [ -f "$SCRIPT_DIR/models.json" ]; then
+    target="$PI_AGENT_DIR/models.json"
+    if [ -L "$target" ] || [ -e "$target" ]; then
+        rm -f "$target"
+    fi
+    ln -s "$SCRIPT_DIR/models.json" "$target"
+    echo "✓ models.json → $target"
+fi
 
 echo ""
 echo "pi-config symlinked into $PI_AGENT_DIR"

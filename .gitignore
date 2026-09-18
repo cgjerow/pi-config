@@ -1,5 +1,6 @@
 # Machine-specific config
 models-store.json
+models_override.json
 
 # Secrets (override with env vars where possible)
 auth.json
