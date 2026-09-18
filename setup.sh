@@ -20,7 +20,7 @@ for dir in skills extensions prompts themes agents; do
     fi
 done
 
-# Symlink AGENTS.md (system prompt / context file)
+# Symlink AGENTS.md (context file)
 if [ -f "$SCRIPT_DIR/AGENTS.md" ]; then
     target="$PI_AGENT_DIR/AGENTS.md"
     if [ -L "$target" ] || [ -e "$target" ]; then
@@ -28,6 +28,16 @@ if [ -f "$SCRIPT_DIR/AGENTS.md" ]; then
     fi
     ln -s "$SCRIPT_DIR/AGENTS.md" "$target"
     echo "✓ AGENTS.md → $target"
+fi
+
+# Symlink APPEND_SYSTEM.md (appended to system prompt)
+if [ -f "$SCRIPT_DIR/APPEND_SYSTEM.md" ]; then
+    target="$PI_AGENT_DIR/APPEND_SYSTEM.md"
+    if [ -L "$target" ] || [ -e "$target" ]; then
+        rm -f "$target"
+    fi
+    ln -s "$SCRIPT_DIR/APPEND_SYSTEM.md" "$target"
+    echo "✓ APPEND_SYSTEM.md → $target"
 fi
 
 # Symlink single-file configs
