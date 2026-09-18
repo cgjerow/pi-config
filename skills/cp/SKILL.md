@@ -1,11 +1,13 @@
 ---
 name: cp
-description: Copy the most relevant recent result to the system clipboard. Use when the user says only "cp" or otherwise asks to copy something useful.
+description: Copy the most relevant thing from the current task to the system clipboard. Use when the user says only "cp" or otherwise asks to copy the actual deliverable rather than a status message.
 ---
 
 # CP Skill
 
-Use this skill when the user wants the most relevant current result copied to the clipboard.
+Use this skill when the user wants the most relevant thing from the current task copied to the clipboard.
+
+The target is the actual deliverable, not the most recent text and not a meta response like "done", "created", or "updated".
 
 ## Trigger
 
@@ -15,16 +17,25 @@ Prefer this workflow when the user's message is exactly `cp`.
 
 1. Identify the best thing to copy from the current task context.
 
-   Prioritize, in order:
-   - the final artifact or answer from the immediately preceding assistant turn
-   - the most reusable code block, command, path, URL, or snippet from the recent exchange
+   Prioritize the underlying deliverable, in order:
+   - the substantive artifact the user asked for, even if it was created earlier in the exchange
+   - the contents of a file, document, prompt, code block, command, query, or other asset produced for the task
+   - a path or URL only when the path or URL itself is the deliverable
    - a concise synthesized value only if the useful thing was implied but not written explicitly
 
-2. If multiple candidates are plausible, ask a short clarifying question instead of guessing.
+   Strong preference rules:
+   - Prefer the created document over a later status message saying it was created
+   - Prefer the generated code over a later note saying it was implemented
+   - Prefer the actual command, query, or snippet over commentary about it
+   - Prefer substance over recency
 
-3. Copy the chosen text exactly as-is, preserving whitespace and formatting.
+2. If the deliverable lives in a file, read that file and copy its contents rather than copying the filename, unless the user clearly wanted the path.
 
-4. Use the helper script in this skill directory to place the content on the system clipboard.
+3. If multiple candidates are plausible, ask a short clarifying question instead of guessing.
+
+4. Copy the chosen text exactly as-is, preserving whitespace and formatting.
+
+5. Use the helper script in this skill directory to place the content on the system clipboard.
 
    Recommended pattern:
 
@@ -37,7 +48,7 @@ Prefer this workflow when the user's message is exactly `cp`.
    rm -f "$tmp_file"
    ```
 
-5. Reply tersely with a confirmation, such as:
+6. Reply tersely with a confirmation, such as:
    - `Copied to clipboard.`
    - `Copied command to clipboard.`
    - `Copied latest code snippet to clipboard.`
@@ -45,7 +56,8 @@ Prefer this workflow when the user's message is exactly `cp`.
 ## Guardrails
 
 - Do not add commentary to the copied text.
-- Do not reformat code, commands, JSON, or URLs before copying.
+- Do not reformat code, commands, JSON, markdown, or URLs before copying.
+- Do not copy a confirmation message when a richer deliverable exists.
 - Do not copy secrets unless the user explicitly asked for that exact secret to be copied.
 - If the user asks to copy a specific thing, use that instead of inferring.
-- If there is no clear candidate in the recent context, ask what should be copied.
+- If there is no clear candidate in the task context, ask what should be copied.

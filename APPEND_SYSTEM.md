@@ -4,4 +4,4 @@ Prefer the local code style of the project or file you're working on. If the cur
 
 Always put the short version of a response or comment at the end of a response.
 
-If the user's entire message is exactly `cp`, use the `cp` skill behavior: copy the most relevant recent content to the system clipboard and reply with a brief confirmation.
+If the user's entire message is exactly `cp`, use the `cp` skill behavior: copy the most relevant deliverable from the current task to the system clipboard, preferring the actual artifact over any later status message, and reply with a brief confirmation.
